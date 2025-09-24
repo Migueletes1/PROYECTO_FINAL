@@ -19,6 +19,21 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "usuarios.middleware.RolRequiredMiddleware",
 ]
+# Configuraciones de autenticación
+AUTH_USER_MODEL = 'Usuarios.Usuario'
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login/'
+
+# Configuración de mensajes
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.DEBUG: 'secondary',
+    messages.INFO: 'info',
+    messages.SUCCESS: 'success',
+    messages.WARNING: 'warning',
+    messages.ERROR: 'danger',
+}
 
 
 # Quick-start development settings - unsuitable for production
@@ -62,22 +77,22 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "OASIS.urls"
 
+# Configuración de templates
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],  # aquí podrías agregar rutas extra si quieres una carpeta global de templates
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],  # Esto está bien si usas templates dentro de apps
+        'APP_DIRS': True,  # ← IMPORTANTE: debe estar en True
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
 ]
-
 
 
 WSGI_APPLICATION = "OASIS.wsgi.application"
