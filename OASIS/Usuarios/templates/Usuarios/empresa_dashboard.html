@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Empresa - Sistema OASIS</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .card-stat {
+            transition: transform 0.2s;
+        }
+        .card-stat:hover {
+            transform: translateY(-5px);
+        }
+        .proyecto-card {
+            border-left: 4px solid #ffc107;
+            transition: all 0.3s;
+        }
+        .proyecto-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .aprendiz-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .progress-ring {
+            width: 60px;
+            height: 60px;
+        }
+        .navbar-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-building me-2"></i>
+                Sistema OASIS - Empresa
+            </a>
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-1"></i>
+                        TechCorp S.A.
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Configuración</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h1><i class="fas fa-building text-warning"></i> Dashboard Empresa</h1>
+                        <p class="text-muted">Bienvenido, gestiona tus proyectos y aprendices asignados.</p>
+                    </div>
+                    <div>
+                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#nuevoProyectoModal">
+                            <i class="fas fa-plus"></i> Nuevo Proyecto
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Métricas de empresa -->
+        <div class="row mb-4">
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card bg-warning text-white card-stat">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h3 id="proyectos-activos">8</h3>
+                                <p>Proyectos Activos</p>
+                            </div>
+                            <i class="fas fa-project-diagram fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card bg-success text-white card-stat">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h3 id="aprendices-trabajando">15</h3>
+                                <p>Aprendices Trabajando</p>
+                            </div>
+                            <i class="fas fa-users fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card bg-info text-white card-stat">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h3 id="proyectos-proceso">5</h3>
+                                <p>En Desarrollo</p>
+                            </div>
+                            <i class="fas fa-cogs fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card bg-primary text-white card-stat">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h3 id="proyectos-completados">12</h3>
+                                <p>Completados</p>
+                            </div>
+                            <i class="fas fa-check-circle fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navegación por pestañas -->
+        <ul class="nav nav-tabs" id="empresaTabs" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active" id="proyectos-tab" data-bs-toggle="tab" data-bs-target="#proyectos" role="tab">
+                    <i class="fas fa-project-diagram"></i> Mis Proyectos
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" id="aprendices-tab" data-bs-toggle="tab" data-bs-target="#aprendices" role="tab">
+                    <i class="fas fa-users"></i> Aprendices Asignados
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" id="perfil-tab" data-bs-toggle="tab" data-bs-target="#perfil-empresa" role="tab">
+                    <i class="fas fa-building"></i> Perfil Empresa
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="empresaTabsContent">
+            <!-- Tab Proyectos -->
+            <div class="tab-pane fade show active" id="proyectos" role="tabpanel">
+                <div class="card border-top-0">
+                    <div class="card-body">
+                        <div class="row" id="proyectos-container">
+                            <!-- Los proyectos se cargarán aquí dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab Aprendices -->
+            <div class="tab-pane fade" id="aprendices" role="tabpanel">
+                <div class="card border-top-0">
+                    <div class="card-body">
+                        <h5 class="mb-4">Aprendices Trabajando en Proyectos</h5>
+                        <div class="row" id="aprendices-container">
+                            <!-- Los aprendices se cargarán aquí dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab Perfil Empresa -->
+            <div class="tab-pane fade" id="perfil-empresa" role="tabpanel">
+                <div class="card border-top-0">
+                    <div class="card-body">
+                        <form id="perfilForm">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Nombre de la Empresa</label>
+                                        <input type="text" class="form-control" value="TechCorp S.A." id="nombreEmpresa">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Sector</label>
+                                        <select class="form-control" id="sectorEmpresa">
+                                            <option value="tecnologia">Tecnología</option>
+                                            <option value="marketing">Marketing</option>
+                                            <option value="salud">Salud</option>
+                                            <option value="educacion">Educación</option>
+                                            <option value="finanzas">Finanzas</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Teléfono</label>
+                                        <input type="tel" class="form-control" value="+57 301 234 5678" id="telefonoEmpresa">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Sitio Web</label>
+                                        <input type="url" class="form-control" value="https://techcorp.com" id="sitioWeb">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Descripción</label>
+                                <textarea class="form-control" rows="4" id="descripcionEmpresa">Empresa líder en desarrollo de software y soluciones tecnológicas innovadoras para el mercado colombiano.</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-warning">Actualizar Perfil</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Nuevo Proyecto -->
+    <div class="modal fade" id="nuevoProyectoModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-plus"></i> Nuevo Proyecto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="nuevoProyectoForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Nombre del Proyecto</label>
+                                    <input type="text" class="form-control" id="nombreProyecto" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Área Tecnológica</label>
+                                    <select class="form-control" id="areaProyecto" required>
+                                        <option value="">Seleccionar área</option>
+                                        <option value="desarrollo-web">Desarrollo Web</option>
+                                        <option value="desarrollo-movil">Desarrollo Móvil</option>
+                                        <option value="data-science">Data Science</option>
+                                        <option value="ciberseguridad">Ciberseguridad</option>
+                                        <option value="ia">Inteligencia Artificial</option>
+                                        <option value="marketing-digital">Marketing Digital</option>
+                                        <option value="diseno-ux">Diseño UX/UI</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Aprendices Requeridos</label>
+                                    <input type="number" class="form-control" id="aprendicesRequeridos" min="1" max="10" value="2" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Duración (semanas)</label>
+                                    <input type="number" class="form-control" id="duracionProyecto" min="4" max="24" value="12" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Fecha de Inicio</label>
+                                    <input type="date" class="form-control" id="fechaInicio" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Nivel de Dificultad</label>
+                                    <select class="form-control" id="nivelDificultad" required>
+                                        <option value="principiante">Principiante</option>
+                                        <option value="intermedio">Intermedio</option>
+                                        <option value="avanzado">Avanzado</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descripción del Proyecto</label>
+                            <textarea class="form-control" rows="4" id="descripcionProyecto" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tecnologías Requeridas</label>
+                            <textarea class="form-control" rows="2" id="tecnologias" placeholder="Ej: React, Node.js, MongoDB, Python..." required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Objetivos del Proyecto</label>
+                            <textarea class="form-control" rows="3" id="objetivos" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-warning" id="publicarProyecto">Publicar Proyecto</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detalles Proyecto -->
+    <div class="modal fade" id="detallesProyectoModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tituloDetalles"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="contenidoDetalles">
+                    <!-- Contenido dinámico -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-warning" id="editarProyecto">Editar Proyecto</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Datos de ejemplo
+        let proyectos = [
+            {
+                id: 1,
+                nombre: "Sistema de Gestión de Inventario",
+                area: "desarrollo-web",
+                descripcion: "Desarrollo de una aplicación web para gestionar inventario de productos con dashboard administrativo y reportes en tiempo real.",
+                tecnologias: "React, Node.js, MongoDB, Express",
+                duracion: 16,
+                fechaInicio: "2025-10-01",
+                nivel: "intermedio",
+                aprendicesRequeridos: 3,
+                aprendicesAsignados: [
+                    { id: 1, nombre: "Juan Pérez", progreso: 75, especialidad: "Frontend" },
+                    { id: 2, nombre: "María González", progreso: 68, especialidad: "Backend" },
+                    { id: 3, nombre: "Carlos Rodríguez", progreso: 82, especialidad: "Database" }
+                ],
+                estado: "en-desarrollo",
+                objetivos: "Crear un sistema completo de gestión de inventario que permita el control de stock, generación de reportes y alertas automáticas."
+            },
+            {
+                id: 2,
+                nombre: "App Móvil para Delivery",
+                area: "desarrollo-movil",
+                descripcion: "Aplicación móvil multiplataforma para servicio de delivery con geolocalización y pagos integrados.",
+                tecnologias: "React Native, Firebase, Stripe API",
+                duracion: 20,
+                fechaInicio: "2025-09-15",
+                nivel: "avanzado",
+                aprendicesRequeridos: 2,
+                aprendicesAsignados: [
+                    { id: 4, nombre: "Ana Martínez", progreso: 45, especialidad: "Mobile Dev" },
+                    { id: 5, nombre: "Diego López", progreso: 52, especialidad: "UX/UI" }
+                ],
+                estado: "en-desarrollo",
+                objetivos: "Desarrollar una aplicación móvil completa con todas las funcionalidades de un servicio de delivery moderno."
+            },
+            {
+                id: 3,
+                nombre: "Análisis de Datos de Ventas",
+                area: "data-science",
+                descripcion: "Proyecto de análisis predictivo de ventas usando machine learning para identificar patrones y tendencias.",
+                tecnologias: "Python, Pandas, Scikit-learn, Matplotlib",
+                duracion: 12,
+                fechaInicio: "2025-11-01",
+                nivel: "intermedio",
+                aprendicesRequeridos: 2,
+                aprendicesAsignados: [],
+                estado: "disponible",
+                objetivos: "Implementar modelos predictivos que ayuden a la empresa a tomar decisiones basadas en datos históricos de ventas."
+            },
+            {
+                id: 4,
+                nombre: "Portal Web Corporativo",
+                area: "desarrollo-web",
+                descripcion: "Desarrollo del nuevo portal web corporativo con CMS personalizado y optimización SEO.",
+                tecnologias: "Vue.js, Laravel, MySQL, Bootstrap",
+                duracion: 14,
+                fechaInicio: "2025-08-15",
+                nivel: "principiante",
+                aprendicesRequeridos: 2,
+                aprendicesAsignados: [
+                    { id: 6, nombre: "Laura Sánchez", progreso: 100, especialidad: "Frontend" },
+                    { id: 7, nombre: "Roberto Kim", progreso: 100, especialidad: "Backend" }
+                ],
+                estado: "completado",
+                objetivos: "Crear un portal web moderno que represente adecuadamente la imagen corporativa y mejore la presencia online."
+            },
+            {
+                id: 5,
+                nombre: "Sistema de Seguridad IoT",
+                area: "ciberseguridad",
+                descripcion: "Implementación de un sistema de monitoreo de seguridad para dispositivos IoT con alertas en tiempo real.",
+                tecnologias: "Python, Raspberry Pi, Docker, Elasticsearch",
+                duracion: 18,
+                fechaInicio: "2025-10-15",
+                nivel: "avanzado",
+                aprendicesRequeridos: 3,
+                aprendicesAsignados: [],
+                estado: "disponible",
+                objetivos: "Desarrollar un sistema robusto de monitoreo que garantice la seguridad de la infraestructura IoT empresarial."
+            }
+        ];
+
+        // Función para obtener color según el estado
+        function getEstadoColor(estado) {
+            const colores = {
+                'disponible': 'success',
+                'en-desarrollo': 'warning',
+                'completado': 'primary',
+                'pausado': 'secondary'
+            };
+            return colores[estado] || 'secondary';
+        }
+
+        // Función para obtener texto del estado
+        function getEstadoTexto(estado) {
+            const textos = {
+                'disponible': 'Disponible',
+                'en-desarrollo': 'En Desarrollo',
+                'completado': 'Completado',
+                'pausado': 'Pausado'
+            };
+            return textos[estado] || 'Desconocido';
+        }
+
+        // Función para renderizar proyectos
+        function renderProyectos() {
+            const container = document.getElementById('proyectos-container');
+            container.innerHTML = '';
+
+            proyectos.forEach(proyecto => {
+                const progresoPromedio = proyecto.aprendicesAsignados.length > 0 
+                    ? proyecto.aprendicesAsignados.reduce((sum, a) => sum + a.progreso, 0) / proyecto.aprendicesAsignados.length 
+                    : 0;
+
+                const card = `
+                    <div class="col-lg-6 col-md-12 mb-4">
+                        <div class="card proyecto-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h5 class="card-title text-primary">${proyecto.nombre}</h5>
+                                    <span class="badge bg-${getEstadoColor(proyecto.estado)}">${getEstadoTexto(proyecto.estado)}</span>
+                                </div>
+                                
+                                <p class="card-text text-muted">${proyecto.descripcion.substring(0, 100)}...</p>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <small class="text-muted">Área:</small><br>
+                                        <span class="badge bg-info">${proyecto.area.replace('-', ' ').toUpperCase()}</span>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted">Duración:</small><br>
+                                        <strong>${proyecto.duracion} semanas</strong>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-muted">Aprendices:</span>
+                                        <span class="badge bg-secondary">${proyecto.aprendicesAsignados.length}/${proyecto.aprendicesRequeridos}</span>
+                                    </div>
+                                    ${proyecto.aprendicesAsignados.length > 0 ? `
+                                        <div class="progress mt-2" style="height: 8px;">
+                                            <div class="progress-bar bg-success" style="width: ${progresoPromedio}%"></div>
+                                        </div>
+                                        <small class="text-muted">Progreso promedio: ${Math.round(progresoPromedio)}%</small>
+                                    ` : '<small class="text-muted mt-2 d-block">Sin aprendices asignados</small>'}
+                                </div>
+
+                                <div class="mb-3">
+                                    ${proyecto.aprendicesAsignados.slice(0, 3).map(aprendiz => `
+                                        <div class="d-flex align-items-center mb-1">
+                                            <div class="aprendiz-avatar">
+                                                ${aprendiz.nombre.charAt(0)}
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <small class="fw-bold">${aprendiz.nombre}</small>
+                                                <div class="progress" style="height: 4px;">
+                                                    <div class="progress-bar" style="width: ${aprendiz.progreso}%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <button class="btn btn-outline-primary btn-sm" onclick="verDetallesProyecto(${proyecto.id})">
+                                        <i class="fas fa-eye"></i> Ver Detalles
+                                    </button>
+                                    <button class="btn btn-outline-warning btn-sm" onclick="editarProyecto(${proyecto.id})">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += card;
+            });
+        }
+
+        // Función para renderizar aprendices
+        function renderAprendices() {
+            const container = document.getElementById('aprendices-container');
+            container.innerHTML = '';
+
+            const todosLosAprendices = [];
+            proyectos.forEach(proyecto => {
+                proyecto.aprendicesAsignados.forEach(aprendiz => {
+                    todosLosAprendices.push({
+                        ...aprendiz,
+                        proyecto: proyecto.nombre,
+                        proyectoId: proyecto.id,
+                        area: proyecto.area
+                    });
+                });
+            });
+
+            if (todosLosAprendices.length === 0) {
+                container.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">No hay aprendices asignados actualmente</h4>
+                        <p class="text-muted">Los aprendices aparecerán aquí cuando se asignen a proyectos.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            todosLosAprendices.forEach(aprendiz => {
+                const card = `
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <div class="aprendiz-avatar mx-auto mb-3" style="width: 80px; height: 80px; font-size: 24px;">
+                                    ${aprendiz.nombre.charAt(0)}
+                                </div>
+                                <h6 class="card-title">${aprendiz.nombre}</h6>
+                                <p class="text-muted small mb-2">${aprendiz.especialidad}</p>
+                                <p class="text-primary small mb-3"><strong>${aprendiz.proyecto}</strong></p>
+                                
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="small">Progreso:</span>
+                                        <span class="small fw-bold">${aprendiz.progreso}%</span>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" style="width: ${aprendiz.progreso}%"></div>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-outline-primary btn-sm" onclick="verPerfilAprendiz(${aprendiz.id})">
+                                        <i class="fas fa-user"></i> Ver Perfil
+                                    </button>
+                                    <button class="btn btn-outline-info btn-sm" onclick="contactarAprendiz(${aprendiz.id})">
+                                        <i class="fas fa-envelope"></i> Contactar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += card;
+            });
+        }
+
+        // Función para actualizar estadísticas
+        function actualizarEstadisticas() {
+            const proyectosActivos = proyectos.filter(p => p.estado === 'en-desarrollo' || p.estado === 'disponible').length;
+            const aprendicesTrabajando = proyectos.reduce((total, p) => total + p.aprendicesAsignados.length, 0);
+            const proyectosEnProceso = proyectos.filter(p => p.estado === 'en-desarrollo').length;
+            const proyectosCompletados = proyectos.filter(p => p.estado === 'completado').length;
+
+            document.getElementById('proyectos-activos').textContent = proyectosActivos;
+            document.getElementById('aprendices-trabajando').textContent = aprendicesTrabajando;
+            document.getElementById('proyectos-proceso').textContent = proyectosEnProceso;
+            document.getElementById('proyectos-completados').textContent = proyectosCompletados;
+        }
+
+        // Función para ver detalles del proyecto
+        function verDetallesProyecto(id) {
+            const proyecto = proyectos.find(p => p.id === id);
+            if (!proyecto) return;
+
+            document.getElementById('tituloDetalles').innerHTML = `<i class="fas fa-project-diagram"></i> ${proyecto.nombre}`;
+            
+            const contenido = `
+                <div class="row">
+                    <div class="col-md-8">
+                        <h6>Descripción del Proyecto</h6>
+                        <p>${proyecto.descripcion}</p>
+                        
+                        <h6>Objetivos</h6>
+                        <p>${proyecto.objetivos}</p>
+                        
+                        <h6>Tecnologías</h6>
+                        <p><span class="badge bg-secondary">${proyecto.tecnologias.split(',').join('</span> <span class="badge bg-secondary">')}</span></p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6>Información del Proyecto</h6>
+                                <p><strong>Área:</strong> ${proyecto.area.replace('-', ' ').toUpperCase()}</p>
+                                <p><strong>Duración:</strong> ${proyecto.duracion} semanas</p>
+                                <p><strong>Nivel:</strong> ${proyecto.nivel.charAt(0).toUpperCase() + proyecto.nivel.slice(1)}</p>
+                                <p><strong>Fecha Inicio:</strong> ${new Date(proyecto.fechaInicio).toLocaleDateString('es-CO')}</p>
+                                <p><strong>Estado:</strong> <span class="badge bg-${getEstadoColor(proyecto.estado)}">${getEstadoTexto(proyecto.estado)}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                ${proyecto.aprendicesAsignados.length > 0 ? `
+                <h6 class="mt-4">Aprendices Asignados</h6>
+                <div class="row">
+                    ${proyecto.aprendicesAsignados.map(aprendiz => `
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="aprendiz-avatar me-3">
+                                            ${aprendiz.nombre.charAt(0)}
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1">${aprendiz.nombre}</h6>
+                                            <p class="text-muted small mb-2">${aprendiz.especialidad}</p>
+                                            <div class="progress mb-1" style="height: 8px;">
+                                                <div class="progress-bar bg-success" style="width: ${aprendiz.progreso}%"></div>
+                                            </div>
+                                            <small class="text-muted">Progreso: ${aprendiz.progreso}%</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                ` : '<p class="text-muted mt-4">No hay aprendices asignados a este proyecto.</p>'}
+            `;
+            
+            document.getElementById('contenidoDetalles').innerHTML = contenido;
+            new bootstrap.Modal(document.getElementById('detallesProyectoModal')).show();
+        }
+
+        // Función para editar proyecto
+        function editarProyecto(id) {
+            alert(`Función de editar proyecto ${id} - Por implementar`);
+        }
+
+        // Función para ver perfil de aprendiz
+        function verPerfilAprendiz(id) {
+            alert(`Ver perfil del aprendiz ${id} - Por implementar`);
+        }
+
+        // Función para contactar aprendiz
+        function contactarAprendiz(id) {
+            alert(`Contactar aprendiz ${id} - Por implementar`);
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Establecer fecha mínima en el formulario
+            const fechaInicio = document.getElementById('fechaInicio');
+            const hoy = new Date().toISOString().split('T')[0];
+            fechaInicio.min = hoy;
+            fechaInicio.value = hoy;
+
+            // Renderizar contenido inicial
+            renderProyectos();
+            renderAprendices();
+            actualizarEstadisticas();
+        });
+
+        // Manejar envío del formulario de nuevo proyecto
+        document.getElementById('publicarProyecto').addEventListener('click', function() {
+            const form = document.getElementById('nuevoProyectoForm');
+            
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const nuevoProyecto = {
+                id: proyectos.length + 1,
+                nombre: document.getElementById('nombreProyecto').value,
+                area: document.getElementById('areaProyecto').value,
+                descripcion: document.getElementById('descripcionProyecto').value,
+                tecnologias: document.getElementById('tecnologias').value,
+                duracion: parseInt(document.getElementById('duracionProyecto').value),
+                fechaInicio: document.getElementById('fechaInicio').value,
+                nivel: document.getElementById('nivelDificultad').value,
+                aprendicesRequeridos: parseInt(document.getElementById('aprendicesRequeridos').value),
+                aprendicesAsignados: [],
+                estado: 'disponible',
+                objetivos: document.getElementById('objetivos').value
+            };
+
+            proyectos.push(nuevoProyecto);
+            
+            // Cerrar modal y limpiar formulario
+            bootstrap.Modal.getInstance(document.getElementById('nuevoProyectoModal')).hide();
+            form.reset();
+            
+            // Actualizar vista
+            renderProyectos();
+            actualizarEstadisticas();
+            
+            // Mostrar mensaje de éxito
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-success alert-dismissible fade show position-fixed';
+            alert.style.cssText = 'top: 20px; right: 20px; z-index: 9999;';
+            alert.innerHTML = `
+                <strong>¡Éxito!</strong> Proyecto "${nuevoProyecto.nombre}" publicado correctamente.
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.parentNode.removeChild(alert);
+                }
+            }, 5000);
+        });
+
+        // Manejar actualización de perfil
+        document.getElementById('perfilForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simular actualización
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-info alert-dismissible fade show position-fixed';
+            alert.style.cssText = 'top: 20px; right: 20px; z-index: 9999;';
+            alert.innerHTML = `
+                <strong>¡Perfil actualizado!</strong> Los cambios se han guardado correctamente.
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.parentNode.removeChild(alert);
+                }
+            }, 3000);
+        });
+
+        // Funcionalidad de búsqueda en tiempo real (opcional)
+        function filtrarProyectos(termino) {
+            const proyectosFiltrados = proyectos.filter(proyecto => 
+                proyecto.nombre.toLowerCase().includes(termino.toLowerCase()) ||
+                proyecto.area.toLowerCase().includes(termino.toLowerCase()) ||
+                proyecto.descripcion.toLowerCase().includes(termino.toLowerCase())
+            );
+            
+            // Renderizar proyectos filtrados
+            const container = document.getElementById('proyectos-container');
+            container.innerHTML = '';
+            
+            proyectosFiltrados.forEach(proyecto => {
+                const progresoPromedio = proyecto.aprendicesAsignados.length > 0 
+                    ? proyecto.aprendicesAsignados.reduce((sum, a) => sum + a.progreso, 0) / proyecto.aprendicesAsignados.length 
+                    : 0;
+
+                const card = `
+                    <div class="col-lg-6 col-md-12 mb-4">
+                        <div class="card proyecto-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h5 class="card-title text-primary">${proyecto.nombre}</h5>
+                                    <span class="badge bg-${getEstadoColor(proyecto.estado)}">${getEstadoTexto(proyecto.estado)}</span>
+                                </div>
+                                
+                                <p class="card-text text-muted">${proyecto.descripcion.substring(0, 100)}...</p>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <small class="text-muted">Área:</small><br>
+                                        <span class="badge bg-info">${proyecto.area.replace('-', ' ').toUpperCase()}</span>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted">Duración:</small><br>
+                                        <strong>${proyecto.duracion} semanas</strong>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-muted">Aprendices:</span>
+                                        <span class="badge bg-secondary">${proyecto.aprendicesAsignados.length}/${proyecto.aprendicesRequeridos}</span>
+                                    </div>
+                                    ${proyecto.aprendicesAsignados.length > 0 ? `
+                                        <div class="progress mt-2" style="height: 8px;">
+                                            <div class="progress-bar bg-success" style="width: ${progresoPromedio}%"></div>
+                                        </div>
+                                        <small class="text-muted">Progreso promedio: ${Math.round(progresoPromedio)}%</small>
+                                    ` : '<small class="text-muted mt-2 d-block">Sin aprendices asignados</small>'}
+                                </div>
+
+                                <div class="mb-3">
+                                    ${proyecto.aprendicesAsignados.slice(0, 3).map(aprendiz => `
+                                        <div class="d-flex align-items-center mb-1">
+                                            <div class="aprendiz-avatar">
+                                                ${aprendiz.nombre.charAt(0)}
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <small class="fw-bold">${aprendiz.nombre}</small>
+                                                <div class="progress" style="height: 4px;">
+                                                    <div class="progress-bar" style="width: ${aprendiz.progreso}%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <button class="btn btn-outline-primary btn-sm" onclick="verDetallesProyecto(${proyecto.id})">
+                                        <i class="fas fa-eye"></i> Ver Detalles
+                                    </button>
+                                    <button class="btn btn-outline-warning btn-sm" onclick="editarProyecto(${proyecto.id})">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += card;
+            });
+        }
+
+        // Agregar funcionalidad de notificaciones push (simuladas)
+        function mostrarNotificacion(titulo, mensaje, tipo = 'info') {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${tipo} alert-dismissible fade show position-fixed`;
+            alert.style.cssText = 'top: 80px; right: 20px; z-index: 9999; min-width: 300px;';
+            alert.innerHTML = `
+                <strong>${titulo}</strong> ${mensaje}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.parentNode.removeChild(alert);
+                }
+            }, 5000);
+        }
+
+        // Simular notificaciones aleatorias
+        setInterval(() => {
+            const notificaciones = [
+                { titulo: 'Nuevo Progreso:', mensaje: 'Juan Pérez ha completado una tarea importante.', tipo: 'success' },
+                { titulo: 'Recordatorio:', mensaje: 'Reunión de seguimiento programada para mañana.', tipo: 'warning' },
+                { titulo: 'Actualización:', mensaje: 'María González ha subido documentación del proyecto.', tipo: 'info' }
+            ];
+            
+            if (Math.random() > 0.85) { // 15% de probabilidad cada 30 segundos
+                const notificacion = notificaciones[Math.floor(Math.random() * notificaciones.length)];
+                mostrarNotificacion(notificacion.titulo, notificacion.mensaje, notificacion.tipo);
+            }
+        }, 30000);
+
+        // Funcionalidad para exportar datos
+        function exportarDatos() {
+            const datos = {
+                proyectos: proyectos,
+                fecha_exportacion: new Date().toISOString(),
+                total_proyectos: proyectos.length,
+                total_aprendices: proyectos.reduce((total, p) => total + p.aprendicesAsignados.length, 0)
+            };
+            
+            const dataStr = JSON.stringify(datos, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `proyectos_empresa_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+        }
+    </script>
+</body>
+</html>

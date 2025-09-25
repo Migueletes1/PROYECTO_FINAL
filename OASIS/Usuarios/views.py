@@ -26,6 +26,21 @@ def dashboard_aprendiz(request):
         'tareas_pendientes': tareas_pendientes,
         'asistencia': asistencia,
     })
+@login_required
+@role_required(['ADMIN'])
+def reportes(request):
+    total_usuarios = Usuario.objects.count()
+    usuarios_por_rol = {
+        'admins': Usuario.objects.filter(rol=Usuario.ADMIN).count(),
+        'empresas': Usuario.objects.filter(rol=Usuario.EMPRESA).count(),
+        'instructores': Usuario.objects.filter(rol=Usuario.INSTRUCTOR).count(),
+        'aprendices': Usuario.objects.filter(rol=Usuario.APRENDIZ).count(),
+    }
+    return render(request, "usuarios/reportes.html", {
+        "total_usuarios": total_usuarios,
+        "usuarios_por_rol": usuarios_por_rol,
+    })
+
 
 # Actualizar la vista home para redirigir correctamente
 def home(request):
@@ -108,11 +123,16 @@ def admin_dashboard(request):
         'instructores': Usuario.objects.filter(rol=Usuario.INSTRUCTOR).count(),
         'aprendices': Usuario.objects.filter(rol=Usuario.APRENDIZ).count(),
     }
+
+    # ✅ Traer los 5 usuarios más recientes
+    usuarios_recientes = Usuario.objects.all().order_by('-date_joined')[:5]
     
     return render(request, "usuarios/admin_dashboard.html", {
         'total_usuarios': total_usuarios,
         'usuarios_por_rol': usuarios_por_rol,
+        'usuarios_recientes': usuarios_recientes,  # nuevo
     })
+
 
 @login_required
 @role_required(['EMPRESA'])
@@ -177,6 +197,7 @@ def editar_usuario(request, user_id):
     
     return render(request, 'usuarios/editar_usuario.html', {'usuario': usuario})
 
+
 @login_required
 @role_required(['ADMIN'])
 def eliminar_usuario(request, user_id):
@@ -219,4 +240,17 @@ def perfil_usuario(request):
             messages.error(request, f'Error al actualizar perfil: {str(e)}')
     
     return render(request, 'usuarios/perfil.html')
+@login_required
+@role_required(['ADMIN'])
+def crear_usuario(request):
+    if request.method == "POST":
+        form = RegistroForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, f'Usuario {user.username} creado exitosamente!')
+            return redirect('crear_usuario')  # vuelve a un nuevo formulario vacío
+    else:
+        form = RegistroForm()
+    return render(request, "usuarios/crear_usuario.html", {"form": form})
+
     
