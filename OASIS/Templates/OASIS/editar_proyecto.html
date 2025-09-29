@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Proyecto{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2><i class="fas fa-edit"></i> Editar Proyecto: {{ proyecto.nombre }}</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        <a href="{% url 'detalle_proyecto' proyecto.pk %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

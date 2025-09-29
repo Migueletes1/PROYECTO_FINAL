@@ -9,8 +9,8 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     "Proyectos",
     "Empresas",
     "Dashboard",
+    "OASIS",
 
 ]
 
@@ -77,12 +78,17 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "OASIS.urls"
 
-# Configuración de templates
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent  # Esto apunta a Proyecto-Final/
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],  # Esto está bien si usas templates dentro de apps
-        'APP_DIRS': True,  # ← IMPORTANTE: debe estar en True
+        'DIRS': [
+            os.path.join(BASE_DIR, "templates"),  # <-- ahora Django verá tu carpeta global
+        ],
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -93,6 +99,18 @@ TEMPLATES = [
         },
     },
 ]
+
+
+# URL para servir archivos estáticos
+STATIC_URL = '/static/'
+
+# Carpeta donde buscará tus archivos estáticos durante el desarrollo
+STATICFILES_DIRS = [
+    BASE_DIR / "Statics",   # aquí está tu carpeta con css, js, imágenes, etc.
+]
+
+# Carpeta donde Django copiará todos los estáticos cuando hagas collectstatic
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
 WSGI_APPLICATION = "OASIS.wsgi.application"
@@ -143,9 +161,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+

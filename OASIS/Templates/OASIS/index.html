@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Bienvenido - Sistema OASIS{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 text-center">
+        <div class="jumbotron bg-white p-5 rounded shadow">
+            <h1 class="display-4 text-primary">
+                <i class="fas fa-graduation-cap"></i> Bienvenido a OASIS
+            </h1>
+            <p class="lead">Sistema de Gestión de Aprendizaje y Administración</p>
+            <hr class="my-4">
+            <p>Accede a tu cuenta para comenzar o regístrate si eres nuevo en la plataforma.</p>
+            
+            <div class="mt-4">
+                <a class="btn btn-primary btn-lg me-3" href="{% url 'login' %}">
+                    <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                </a>
+                <a class="btn btn-outline-primary btn-lg" href="{% url 'registro' %}">
+                    <i class="fas fa-user-plus"></i> Registrarse
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4 text-center">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                <h5>Para Aprendices</h5>
+                <p class="text-muted">Accede a tus cursos, materiales y sigue tu progreso académico.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 text-center">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <i class="fas fa-chalkboard-teacher fa-3x text-success mb-3"></i>
+                <h5>Para Instructores</h5>
+                <p class="text-muted">Gestiona tus clases, estudiantes y contenido educativo.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 text-center">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <i class="fas fa-building fa-3x text-warning mb-3"></i>
+                <h5>Para Empresas</h5>
+                <p class="text-muted">Conecta con talento y ofrece oportunidades de práctica.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

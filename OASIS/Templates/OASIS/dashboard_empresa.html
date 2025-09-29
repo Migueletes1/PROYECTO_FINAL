@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Empresa - Sistema OASIS{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1><i class="fas fa-building text-warning"></i> Dashboard Empresa</h1>
+            <p class="text-muted">Bienvenido {{ user.username }}, gestiona tus proyectos y aprendices asignados.</p>
+        </div>
+        <div>
+            <a href="{% url 'crear_proyecto' %}" class="btn btn-warning">
+                <i class="fas fa-plus"></i> Nuevo Proyecto
+            </a>
+        </div>
+    </div>
+
+    <!-- Métricas -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card bg-warning text-white card-stat">
+                <div class="card-body">
+                    <h3>{{ proyectos_activos }}</h3>
+                    <p>Proyectos Activos</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card bg-success text-white card-stat">
+                <div class="card-body">
+                    <h3>{{ aprendices_trabajando }}</h3>
+                    <p>Aprendices Trabajando</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card bg-info text-white card-stat">
+                <div class="card-body">
+                    <h3>{{ proyectos_en_proceso }}</h3>
+                    <p>En Desarrollo</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card bg-primary text-white card-stat">
+                <div class="card-body">
+                    <h3>{{ proyectos_completados }}</h3>
+                    <p>Completados</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de proyectos -->
+    <div class="row">
+        {% for proyecto in proyectos %}
+        <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card h-100 border-warning">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h5 class="card-title text-primary">{{ proyecto.nombre }}</h5>
+                        <span class="badge bg-{% if proyecto.estado == 'EN_DESARROLLO' %}warning{% elif proyecto.estado == 'COMPLETADO' %}primary{% else %}secondary{% endif %}">
+                            {{ proyecto.get_estado_display }}
+                        </span>
+                    </div>
+
+                    <p class="text-muted">{{ proyecto.descripcion|truncatewords:20 }}</p>
+
+                    <p><strong>Área:</strong> {{ proyecto.get_area_display }}</p>
+                    <p><strong>Duración:</strong> {{ proyecto.duracion_semanas }} semanas</p>
+
+                    <div class="progress mb-2">
+                        <div class="progress-bar bg-success" style="width: {{ proyecto.progreso_promedio }}%">
+                            {{ proyecto.progreso_promedio }}%
+                        </div>
+                    </div>
+
+                    <div>
+                        <strong>Aprendices:</strong>
+                        {% for aprendiz in proyecto.aprendices.all %}
+                            <span class="badge bg-primary">{{ aprendiz.username }}</span>
+                        {% empty %}
+                            <span class="text-muted">Sin aprendices</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <a href="{% url 'detalle_proyecto' proyecto.id %}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-eye"></i> Ver Detalles
+                    </a>
+                    <a href="{% url 'editar_proyecto' proyecto.id %}" class="btn btn-outline-warning btn-sm">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">No tienes proyectos registrados aún.</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
