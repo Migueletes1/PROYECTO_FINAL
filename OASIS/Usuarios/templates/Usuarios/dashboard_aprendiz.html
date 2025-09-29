@@ -97,7 +97,7 @@
     </li>
     <li class="nav-item">
         <button class="nav-link" id="practicas-tab" data-bs-toggle="tab" data-bs-target="#practicas" role="tab">
-            <i class="fas fa-briefcase"></i> Prácticas
+            <i class="fas fa-briefcase"></i> Proyectos
         </button>
     </li>
 </ul>
@@ -341,64 +341,28 @@
             </div>
         </div>
     </div>
-    
-    <!-- Tab Prácticas -->
-    <div class="tab-pane fade" id="practicas" role="tabpanel">
-        <div class="card border-top-0">
-            <div class="card-body">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" placeholder="Buscar oportunidades...">
-                    </div>
-                    <div class="col-md-6">
-                        <select class="form-control">
-                            <option>Todas las áreas</option>
-                            <option>Tecnología</option>
-                            <option>Marketing</option>
-                            <option>Administración</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <div class="card border-warning">
-                            <div class="card-header bg-warning text-dark">
-                                <h6 class="mb-0">Desarrollador Web Junior</h6>
-                            </div>
-                            <div class="card-body">
-                                <p class="small"><strong>Empresa:</strong> TechCorp S.A.</p>
-                                <p class="small"><strong>Duración:</strong> 6 meses</p>
-                                <p class="small"><strong>Área:</strong> Tecnología</p>
-                                <p class="small"><strong>Fecha límite:</strong> 30/10/2025</p>
-                                <p class="small text-muted">Práctica en desarrollo de aplicaciones web usando React y Node.js...</p>
-                                <div class="d-grid gap-2">
-                                    <button class="btn btn-warning btn-sm">Postularme</button>
-                                    <button class="btn btn-outline-info btn-sm">Ver Detalles</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6 mb-3">
-                        <div class="card border-success">
-                            <div class="card-header bg-success text-white">
-                                <h6 class="mb-0">Analista de Datos</h6>
-                            </div>
-                            <div class="card-body">
-                                <p class="small"><strong>Empresa:</strong> DataFlow Inc.</p>
-                                <p class="small"><strong>Duración:</strong> 4 meses</p>
-                                <p class="small"><strong>Área:</strong> Análisis de Datos</p>
-                                <p class="small"><strong>Fecha límite:</strong> 15/11/2025</p>
-                                <p class="small text-muted">Análisis de grandes volúmenes de datos usando Python y SQL...</p>
-                                <div class="d-grid gap-2">
-                                    <button class="btn btn-success btn-sm">Postularme</button>
-                                    <button class="btn btn-outline-info btn-sm">Ver Detalles</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+{% for proyecto in proyectos %}
+<div class="col-md-6 mb-3">
+    <div class="card border-success">
+        <div class="card-header bg-success text-white">
+            <h6 class="mb-0">{{ proyecto.nombre }}</h6>
+        </div>
+        <div class="card-body">
+            <p class="small"><strong>Empresa:</strong> {{ proyecto.empresa.nombre }}</p>
+            <p class="small"><strong>Duración:</strong> {{ proyecto.duracion_semanas }} semanas</p>
+            <p class="small"><strong>Área:</strong> {{ proyecto.area }}</p>
+            <p class="small"><strong>Descripción:</strong> {{ proyecto.descripcion|truncatewords:20 }}</p>
+            <div class="d-grid gap-2">
+                <a href="{% url 'detalle_proyecto' proyecto.pk %}" class="btn btn-outline-info btn-sm">Ver Detalles</a>
+                <a href="{% url 'postular_proyecto' proyecto.pk %}" class="btn btn-success btn-sm">Postularme</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% empty %}
+    <p class="text-muted">No hay proyectos disponibles por ahora.</p>
+{% endfor %}
+
                 
                 <!-- Mis postulaciones -->
                 <div class="mt-4">

@@ -1,11 +1,11 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
-from .forms import RegistroForm, LoginForm
-from .models import Usuario
+from .forms import RegistroForm, LoginForm, ProyectoForm
+from .models import Usuario, Proyecto
 from .decorators import role_required
 
 # Agregar estas nuevas vistas a tu views.py existente
@@ -26,6 +26,26 @@ def dashboard_aprendiz(request):
         'tareas_pendientes': tareas_pendientes,
         'asistencia': asistencia,
     })
+@login_required
+@role_required(['EMPRESA'])
+def empresa_dashboard(request):
+    proyectos = Proyecto.objects.filter(empresa=request.user)
+
+    total_proyectos = proyectos.count()
+    proyectos_activos = proyectos.filter(estado="EN_DESARROLLO").count()
+    proyectos_completados = proyectos.filter(estado="COMPLETADO").count()
+    proyectos_en_proceso = proyectos.filter(estado="EN_DESARROLLO").count()
+    aprendices_trabajando = Usuario.objects.filter(proyectos_asignados__empresa=request.user).distinct().count()
+
+    return render(request, "usuarios/dashboard_empresa.html", {
+        "proyectos": proyectos,
+        "total_proyectos": total_proyectos,
+        "proyectos_activos": proyectos_activos,
+        "proyectos_completados": proyectos_completados,
+        "proyectos_en_proceso": proyectos_en_proceso,
+        "aprendices_trabajando": aprendices_trabajando,
+    })
+
 @login_required
 @role_required(['ADMIN'])
 def reportes(request):
@@ -134,10 +154,8 @@ def admin_dashboard(request):
     })
 
 
-@login_required
-@role_required(['EMPRESA'])
-def empresa_dashboard(request):
-    return render(request, "usuarios/empresa_dashboard.html")
+
+
 
 @login_required
 @role_required(['INSTRUCTOR'])
@@ -252,5 +270,41 @@ def crear_usuario(request):
     else:
         form = RegistroForm()
     return render(request, "usuarios/crear_usuario.html", {"form": form})
+@login_required
+@role_required(['EMPRESA'])
+def crear_proyecto(request):
+    if request.method == "POST":
+        form = ProyectoForm(request.POST)
+        if form.is_valid():
+            proyecto = form.save(commit=False)
+            proyecto.empresa = request.user   # asignar empresa automáticamente
+            proyecto.save()
+            form.save_m2m()  # guardar aprendices seleccionados
+            messages.success(request, f"Proyecto '{proyecto.nombre}' creado exitosamente")
+            return redirect("empresa_dashboard")
+    else:
+        form = ProyectoForm()
+
+    return render(request, "usuarios/crear_proyecto.html", {"form": form})
+@login_required
+@role_required(['EMPRESA'])
+def detalle_proyecto(request, pk):
+    proyecto = get_object_or_404(Proyecto, pk=pk, empresa=request.user)
+    return render(request, "usuarios/detalle_proyecto.html", {"proyecto": proyecto})
+@login_required
+@role_required(['EMPRESA'])
+def editar_proyecto(request, pk):
+    proyecto = get_object_or_404(Proyecto, pk=pk, empresa=request.user)
+
+    if request.method == "POST":
+        form = ProyectoForm(request.POST, instance=proyecto)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"Proyecto '{proyecto.nombre}' actualizado exitosamente")
+            return redirect("detalle_proyecto", pk=proyecto.pk)
+    else:
+        form = ProyectoForm(instance=proyecto)
+
+    return render(request, "usuarios/editar_proyecto.html", {"form": form, "proyecto": proyecto})
 
     
