@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load widget_tweaks %} 
 {% block title %}Registrarse{% endblock %}
 
 {% block content %}
@@ -23,7 +23,7 @@
                 {% endfor %}
             {% endif %}
 
-            <form method="post">
+            <form method="post" class="needs-validation" novalidate>
                 {% csrf_token %}
                 
                 {% for field in form %}
@@ -40,12 +40,31 @@
                                 {{ field.label }}
                             {% endif %}
                         </label>
-                        {{ field }}
+
+                        {% if 'password' in field.name %}
+                            {# BLOQUE ESPECIAL: Campo de Contraseña con botón de toggle #}
+                            <div class="input-group">
+                                {{ field|attr:"required:true" }}
+                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="{{ field.id_for_label }}" tabindex="-1">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <div class="invalid-feedback">
+                                    Por favor, ingresa tu {{ field.label|lower }}.
+                                </div>
+                            </div>
+                        {% else %}
+                            {# BLOQUE ESTÁNDAR: Otros campos (Usuario, Email, etc.) #}
+                            {{ field|attr:"required:true" }}
+                            <div class="invalid-feedback">
+                                Por favor, ingresa tu {{ field.label|lower }}.
+                            </div>
+                        {% endif %}
+
                         {% if field.errors %}
                             <div class="text-danger small mt-1">{{ field.errors.0 }}</div>
                         {% endif %}
                         {% if field.help_text %}
-                            <div class="text-muted small mt-1">{{ field.help_text }}</div>
+                            <div class="text-muted small mt-1">{{ field.help_text|safe }}</div>
                         {% endif %}
                     </div>
                 {% endfor %}
@@ -68,7 +87,7 @@
 </div>
 
 <style>
-/* El estilo es exactamente el mismo que en login.html para mantener la consistencia */
+/* El CSS se mantiene idéntico al login.html para la consistencia visual */
 .auth-card {
     background: white;
     padding: 2.5rem;
@@ -88,24 +107,80 @@
     font-size: 1.75rem;
 }
 
+/* Estilos para que el input y el botón de toggle encajen */
 .auth-card form .form-control {
     padding: 0.875rem 1rem;
     border: 2px solid #E5E7EB;
     border-radius: 0.75rem;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
 }
 
 .auth-card form .form-control:focus {
     border-color: #39A900;
     box-shadow: 0 0 0 3px rgba(57, 169, 0, 0.1);
 }
+
+.toggle-password {
+    border-color: #E5E7EB !important;
+    background-color: #f7f7f7 !important;
+    border-left: none !important;
+    border-top-right-radius: 0.75rem !important;
+    border-bottom-right-radius: 0.75rem !important;
+}
+
+.toggle-password:hover {
+    background-color: #ececec !important;
+}
+
+.was-validated .form-control:invalid, 
+.form-control.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1) !important;
+}
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Aplica la clase Bootstrap 'form-control' a todos los campos de entrada de texto, correo y contraseña
+    // FUNCIÓN 1: Aplicar clase form-control y Validación de Bootstrap
+    const form = document.querySelector('.needs-validation');
     const inputs = document.querySelectorAll('input[type="text"], input[type="password"], input[type="email"]');
+
     inputs.forEach(input => {
+        // Asegura que todos los inputs tengan la clase form-control
         input.classList.add('form-control');
+    });
+
+    // Habilita la validación visual de Bootstrap (FUNCIÓN ADICIONAL)
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    }, false);
+
+    // FUNCIÓN 2: Lógica para el botón de "Ver Contraseña"
+    document.querySelectorAll('.toggle-password').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault(); // Previene que el botón intente enviar el formulario
+            
+            // Obtener el ID del input que debe ser afectado
+            const targetId = this.getAttribute('data-target');
+            const passwordInput = document.getElementById(targetId);
+            const icon = this.querySelector('i');
+
+            // Cambiar el tipo de input entre 'password' y 'text'
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash'); // Icono para ocultar
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye'); // Icono para mostrar
+            }
+        });
     });
 });
 </script>

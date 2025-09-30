@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "Empresas",
     "Dashboard",
     "OASIS",
+    'widget_tweaks',
 
 ]
 
