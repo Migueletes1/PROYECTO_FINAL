@@ -3,55 +3,449 @@
 {% block title %}Bienvenido - Sistema OASIS{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-lg-8 text-center">
-        <div class="jumbotron bg-white p-5 rounded shadow">
-            <h1 class="display-4 text-primary">
-                <i class="fas fa-graduation-cap"></i> Bienvenido a OASIS
-            </h1>
-            <p class="lead">Sistema de Gestión de Aprendizaje y Administración</p>
-            <hr class="my-4">
-            <p>Accede a tu cuenta para comenzar o regístrate si eres nuevo en la plataforma.</p>
-            
-            <div class="mt-4">
-                <a class="btn btn-primary btn-lg me-3" href="{% url 'login' %}">
-                    <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
-                </a>
-                <a class="btn btn-outline-primary btn-lg" href="{% url 'registro' %}">
-                    <i class="fas fa-user-plus"></i> Registrarse
-                </a>
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+        <div class="col-lg-10">
+            <div class="hero-content text-center fade-in">
+                <div class="hero-badge mb-4">
+                    <span class="badge badge-primary" style="font-size: 0.9rem; padding: 0.75rem 1.5rem;">
+                        <i class="fas fa-graduation-cap"></i> SENA - Formación de Calidad
+                    </span>
+                </div>
+                
+                <h1 class="display-3 fw-bold mb-4" style="color: #1F5500; line-height: 1.2;">
+                    Bienvenido a <span style="background: linear-gradient(135deg, #39A900 0%, #2D7A00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">OASIS</span>
+                </h1>
+                
+                <p class="lead mb-4" style="font-size: 1.5rem; color: #4B5563; max-width: 700px; margin: 0 auto;">
+                    <strong>Sistema de Gestión de Aprendizaje y Administración</strong>
+                </p>
+                
+                <p class="mb-5" style="font-size: 1.1rem; color: #6B7280; max-width: 650px; margin: 0 auto;">
+                    Conectamos aprendices, instructores y empresas en un ecosistema de formación integral. 
+                    Tu futuro profesional comienza aquí.
+                </p>
+                
+                <div class="hero-buttons mt-5">
+                    <a class="btn btn-primary btn-lg me-3 mb-3" href="{% url 'login' %}" style="padding: 1rem 2.5rem; font-size: 1.1rem;">
+                        <i class="fas fa-sign-in-alt me-2"></i> Iniciar Sesión
+                    </a>
+                    <a class="btn btn-outline-primary btn-lg mb-3" href="{% url 'registro' %}" style="padding: 1rem 2.5rem; font-size: 1.1rem;">
+                        <i class="fas fa-user-plus me-2"></i> Registrarse
+                    </a>
+                </div>
+                
+                <div class="hero-stats mt-5 pt-4">
+                    <div class="row justify-content-center">
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="stat-item">
+                                <h3 class="mb-1" style="color: #39A900; font-weight: 800;">1000+</h3>
+                                <p class="mb-0 text-muted small">Aprendices Activos</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="stat-item">
+                                <h3 class="mb-1" style="color: #39A900; font-weight: 800;">150+</h3>
+                                <p class="mb-0 text-muted small">Instructores</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="stat-item">
+                                <h3 class="mb-1" style="color: #39A900; font-weight: 800;">80+</h3>
+                                <p class="mb-0 text-muted small">Empresas Aliadas</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="stat-item">
+                                <h3 class="mb-1" style="color: #39A900; font-weight: 800;">200+</h3>
+                                <p class="mb-0 text-muted small">Proyectos Activos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row mt-5">
-    <div class="col-md-4 text-center">
-        <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body">
-                <i class="fas fa-users fa-3x text-primary mb-3"></i>
-                <h5>Para Aprendices</h5>
-                <p class="text-muted">Accede a tus cursos, materiales y sigue tu progreso académico.</p>
+<!-- Features Section -->
+<div class="row mt-5 g-4">
+    <div class="col-md-4">
+        <div class="feature-card h-100">
+            <div class="featured-badge">
+                <span class="badge bg-success">Más Popular</span>
+            </div>
+            <div class="feature-icon-wrapper">
+                <div class="feature-icon bg-primary-soft">
+                    <i class="fas fa-users fa-3x text-primary"></i>
+                </div>
+            </div>
+            <div class="card-body text-center pt-4">
+                <h4 class="mb-3 fw-bold">Para Aprendices</h4>
+                <p class="text-muted mb-4">
+                    Accede a tus cursos, materiales de estudio, proyectos y sigue tu progreso académico en tiempo real.
+                </p>
+                <ul class="list-unstyled text-start text-muted" style="font-size: 0.95rem;">
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Gestión de proyectos</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Seguimiento académico</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Conexión con empresas</li>
+                </ul>
             </div>
         </div>
     </div>
-    <div class="col-md-4 text-center">
-        <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body">
-                <i class="fas fa-chalkboard-teacher fa-3x text-success mb-3"></i>
-                <h5>Para Instructores</h5>
-                <p class="text-muted">Gestiona tus clases, estudiantes y contenido educativo.</p>
+    
+    <div class="col-md-4">
+        <div class="feature-card h-100 featured">
+            <div class="feature-icon-wrapper">
+                <div class="feature-icon bg-success-soft">
+                    <i class="fas fa-chalkboard-teacher fa-3x text-success"></i>
+                </div>
+            </div>
+            <div class="card-body text-center pt-4">
+                <h4 class="mb-3 fw-bold">Para Instructores</h4>
+                <p class="text-muted mb-4">
+                    Gestiona tus clases, estudiantes, evalúa proyectos y crea contenido educativo de forma eficiente.
+                </p>
+                <ul class="list-unstyled text-start text-muted" style="font-size: 0.95rem;">
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Panel de control completo</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Evaluación de proyectos</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Reportes automáticos</li>
+                </ul>
             </div>
         </div>
     </div>
-    <div class="col-md-4 text-center">
-        <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body">
-                <i class="fas fa-building fa-3x text-warning mb-3"></i>
-                <h5>Para Empresas</h5>
-                <p class="text-muted">Conecta con talento y ofrece oportunidades de práctica.</p>
+    
+    <div class="col-md-4">
+        <div class="feature-card h-100">
+            <div class="feature-icon-wrapper">
+                <div class="feature-icon bg-warning-soft">
+                    <i class="fas fa-building fa-3x text-warning"></i>
+                </div>
+            </div>
+            <div class="card-body text-center pt-4">
+                <h4 class="mb-3 fw-bold">Para Empresas</h4>
+                <p class="text-muted mb-4">
+                    Conecta con talento SENA, publica oportunidades de práctica y encuentra los mejores perfiles.
+                </p>
+                <ul class="list-unstyled text-start text-muted" style="font-size: 0.95rem;">
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Banco de talento</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Publicación de vacantes</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Gestión de practicantes</li>
+                </ul>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Benefits Section -->
+<div class="row mt-5 pt-5">
+    <div class="col-12 text-center mb-5">
+        <h2 class="display-5 fw-bold mb-3" style="color: #1F5500;">¿Por qué elegir OASIS?</h2>
+        <p class="lead text-muted">Una plataforma diseñada para potenciar tu formación</p>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="benefit-card text-center">
+            <div class="benefit-icon mx-auto mb-3">
+                <i class="fas fa-clock fa-2x"></i>
+            </div>
+            <h5 class="fw-bold mb-2">Disponible 24/7</h5>
+            <p class="text-muted small mb-0">Accede cuando quieras, desde cualquier dispositivo</p>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="benefit-card text-center">
+            <div class="benefit-icon mx-auto mb-3">
+                <i class="fas fa-shield-alt fa-2x"></i>
+            </div>
+            <h5 class="fw-bold mb-2">Seguro y Confiable</h5>
+            <p class="text-muted small mb-0">Tus datos protegidos con los más altos estándares</p>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="benefit-card text-center">
+            <div class="benefit-icon mx-auto mb-3">
+                <i class="fas fa-rocket fa-2x"></i>
+            </div>
+            <h5 class="fw-bold mb-2">Fácil de Usar</h5>
+            <p class="text-muted small mb-0">Interfaz intuitiva y moderna para todos</p>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="benefit-card text-center">
+            <div class="benefit-icon mx-auto mb-3">
+                <i class="fas fa-headset fa-2x"></i>
+            </div>
+            <h5 class="fw-bold mb-2">Soporte Constante</h5>
+            <p class="text-muted small mb-0">Equipo disponible para ayudarte en todo momento</p>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Section -->
+<div class="row mt-5 pt-4 mb-5">
+    <div class="col-12">
+        <div class="cta-section text-center">
+            <h3 class="fw-bold mb-3" style="color: white;">¿Listo para Empezar?</h3>
+            <p class="mb-4" style="color: rgba(255,255,255,0.9); font-size: 1.1rem;">
+                Únete a la comunidad OASIS y transforma tu futuro profesional
+            </p>
+            <a href="{% url 'login' %}" class="btn btn-light btn-lg" style="padding: 1rem 2.5rem;">
+                <i class="fas fa-arrow-right me-2"></i> Comienza Ahora
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Hero Section Styles */
+.hero-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(57, 169, 0, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-badge .badge {
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(57, 169, 0, 0.2);
+}
+
+.hero-buttons .btn {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.hero-buttons .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.hero-stats .stat-item {
+    padding: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.hero-stats .stat-item:hover {
+    transform: scale(1.05);
+}
+
+/* Feature Cards Styles */
+.feature-card {
+    background: white;
+    border-radius: 1.5rem;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #39A900 0%, #4BC800 100%);
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    border-color: #39A900;
+}
+
+.feature-card:hover::before {
+    transform: scaleX(1);
+}
+
+.feature-card.featured {
+    border: 2px solid #10B981;
+    background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+}
+
+.featured-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+}
+
+.featured-badge .badge {
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+}
+
+.feature-icon-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.feature-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.bg-primary-soft {
+    background: linear-gradient(135deg, rgba(57, 169, 0, 0.1) 0%, rgba(57, 169, 0, 0.05) 100%);
+}
+
+.bg-success-soft {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+}
+
+.bg-warning-soft {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+}
+
+/* Benefits Section */
+.benefit-card {
+    background: white;
+    padding: 2rem 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.benefit-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.benefit-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #39A900 0%, #2D7A00 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.benefit-card:hover .benefit-icon {
+    transform: scale(1.15) rotate(-5deg);
+    box-shadow: 0 8px 16px rgba(57, 169, 0, 0.3);
+}
+
+/* CTA Section */
+.cta-section {
+    background: linear-gradient(135deg, #39A900 0%, #2D7A00 100%);
+    padding: 4rem 2rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 40px rgba(57, 169, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -25%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+.cta-section::after {
+    content: '';
+    position: absolute;
+    bottom: -50%;
+    right: -25%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+.cta-section h3, .cta-section p, .cta-section .btn {
+    position: relative;
+    z-index: 1;
+}
+
+.cta-section .btn-light:hover {
+    background: white;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.8s ease-out;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .display-3 {
+        font-size: 2.5rem;
+    }
+    
+    .lead {
+        font-size: 1.2rem;
+    }
+    
+    .hero-buttons .btn {
+        display: block;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    
+    .feature-card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .cta-section {
+        padding: 3rem 1.5rem;
+    }
+}
+</style>
 {% endblock %}
