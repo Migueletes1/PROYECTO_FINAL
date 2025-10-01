@@ -1,37 +1,78 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block title %}Crear Usuario - Sistema OASIS{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <!-- Card -->
-            <div class="card shadow-sm">
+            <div class="card auth-card shadow-lg">
                 <div class="card-header bg-success text-white">
-                    <h5 class="mb-0"><i class="fas fa-user-plus"></i> Crear Nuevo Usuario</h5>
+                    <h4 class="mb-0 fw-bold"><i class="fas fa-user-plus me-2"></i> Crear Nuevo Usuario</h4>
                 </div>
+                
                 <div class="card-body">
-                    <!-- Mensajes de éxito o error -->
                     {% if messages %}
                         {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }}">
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
                                 {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         {% endfor %}
                     {% endif %}
 
-                    <!-- Formulario -->
-                    <form method="POST">
+                    <form method="POST" class="needs-validation" novalidate>
                         {% csrf_token %}
-                        {{ form.as_p }}
 
-                        <div class="d-flex justify-content-between mt-3">
-                            <button type="submit" class="btn btn-success">
-                                <i class="fas fa-save"></i> Guardar
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label fw-semibold">
+                                    {{ field.label }}
+                                    {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+                                </label>
+
+                                {% if 'password' in field.name %}
+                                    {# Campo de Contraseña con Toggle #}
+                                    <div class="input-group">
+                                        {{ field|add_class:"form-control"|attr:"required:true" }}
+                                        <button class="btn btn-outline-secondary toggle-password" type="button" data-target="{{ field.id_for_label }}" tabindex="-1">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <div class="invalid-feedback">
+                                            Por favor, ingrese una contraseña.
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    {# Otros Campos: Aplica form-control y required si es necesario #}
+                                    {{ field|add_class:"form-control" }}
+                                    
+                                    {# Si el campo es requerido, agregamos el feedback #}
+                                    {% if field.field.required %}
+                                        <div class="invalid-feedback">
+                                            Por favor, complete el campo "{{ field.label }}".
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+
+                                {# Errores específicos del campo #}
+                                {% if field.errors %}
+                                    <div class="text-danger small mt-1">{{ field.errors.0 }}</div>
+                                {% endif %}
+                                
+                                {# Texto de ayuda #}
+                                {% if field.help_text %}
+                                    <div class="text-muted small mt-1">{{ field.help_text|safe }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <div class="d-flex justify-content-between mt-4 border-top pt-3">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-save me-2"></i> Guardar Usuario
                             </button>
-                            <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left"></i> Volver al Panel
+                            <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-arrow-left me-2"></i> Volver
                             </a>
                         </div>
                     </form>
@@ -40,4 +81,76 @@
         </div>
     </div>
 </div>
+
+<style>
+/* Estilos adicionales para mantener la coherencia visual con login/registro */
+.auth-card {
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Redondeo de inputs para que coincida con el botón de toggle */
+.auth-card form .form-control {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+/* Estilo para el botón de toggle (Copio el estilo anterior para consistencia) */
+.toggle-password {
+    border-color: #E5E7EB !important;
+    background-color: #f7f7f7 !important;
+    border-left: none !important;
+    border-top-right-radius: 0.75rem !important;
+    border-bottom-right-radius: 0.75rem !important;
+    height: calc(1.5em + 0.75rem + 2px); /* Asegura que el botón se alinee */
+}
+
+.toggle-password:hover {
+    background-color: #ececec !important;
+}
+
+/* Estilo para inputs cuando están validados por Bootstrap/HTML5 */
+.was-validated .form-control:invalid, 
+.form-control.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1) !important;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // FUNCIÓN 1: Validación Visual de Bootstrap (Aplica a todos los campos)
+    const form = document.querySelector('.needs-validation');
+    
+    // Habilita la validación visual
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    }, false);
+
+    // FUNCIÓN 2: Lógica para el botón de "Ver Contraseña" (Solo campos de password)
+    document.querySelectorAll('.toggle-password').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault(); // Previene que el botón intente enviar el formulario
+            
+            const targetId = this.getAttribute('data-target');
+            const passwordInput = document.getElementById(targetId);
+            const icon = this.querySelector('i');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash'); // Icono para ocultar
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye'); // Icono para mostrar
+            }
+        });
+    });
+});
+</script>
 {% endblock %}
